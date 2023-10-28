@@ -1,8 +1,7 @@
 const fs = require('fs')
-const path = 'DB.json'
 
 class ProductManager {
-    constructor() {
+    constructor(path) {
         this.path = path
     }
     async getProducts() {
@@ -20,7 +19,12 @@ class ProductManager {
 
     async createProduct(product) {
         try {
+            const products = await this.getProducts()
             const { title, description, price, thumbnail, code, stock } = product
+            const productsDb = products.find(prod => prod.code === product.code)
+            if (productsDb) {
+                return console.log ("El producto que intenta agregar ya se encuentra en la lista")
+            }
             if (!title || !description || !price || !thumbnail || !code || !stock) {
                 console.log('Faltan datos en el producto')
             } else {
@@ -111,11 +115,12 @@ const tercerP =
 }
 
 async function test() {
-    const manager = new ProductManager()
-    //await manager.createProduct(primerP)
+    const path = 'DB.json'
+    const manager = new ProductManager(path)
+    await manager.createProduct(tercerP)
     const products = await manager.getProducts()
     //await manager.updateProduct(2, tercerP)
-    console.log(products);
+    //console.log(products);
     //await manager.deleteProduct(1)
 }
 
