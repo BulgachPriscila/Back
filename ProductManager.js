@@ -129,9 +129,6 @@ const cuartoP =
     const path = 'DB.json'
     const manager = new ProductManager(path)
     await manager.createProduct(primerP)
-    await manager.createProduct(segundoP)
-    await manager.createProduct(tercerP)
-    await manager.createProduct(cuartoP)
     //const products = await manager.getProducts()
     //await manager.updateProduct(2, tercerP)
     //console.log(products);
