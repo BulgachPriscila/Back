@@ -1,14 +1,17 @@
-const fs = require('fs')
+import { existsSync, promises } from 'fs'
 
 class ProductManager {
     constructor(path) {
         this.path = path
     }
-    async getProducts() {
+    async getProducts(queryObj) {
+        console.log("queryObj", queryObj)
+        const {limit} = queryObj
         try {
-            if (fs.existsSync(this.path)) {
-                const productsDB = await fs.promises.readFile(this.path, 'utf-8')
-                return JSON.parse(productsDB)
+            if (existsSync(this.path)) {
+                const productsDB = await promises.readFile(this.path, 'utf-8');
+                const productsData = JSON.parse (productsDB);
+                return limit ? productsData.slice(0, limit) : productsData;
             } else {
                 return []
             }
@@ -36,7 +39,7 @@ class ProductManager {
                     id = products[products.length - 1].id + 1
                 }
                 products.push({ id, ...product })
-                await fs.promises.writeFile(path, JSON.stringify(products))
+                await promises.writeFile(path, JSON.stringify(products))
             }
         } catch (error) {
             return error
@@ -61,7 +64,7 @@ class ProductManager {
         try {
             const products = await this.getProducts()
             const newProductsList = products.filter(p => p.id !== id)
-            await fs.promises.writeFile(path, JSON.stringify(newProductsList))
+            await promises.writeFile(path, JSON.stringify(newProductsList))
             console.log('elemento eliminado')
 
 
@@ -78,7 +81,7 @@ class ProductManager {
             }
             const updateProduct = { ...products[index], ...obj };
             products.splice(index, 1, updateProduct);
-            await fs.promises.writeFile(path, JSON.stringify(products));
+            await promises.writeFile(path, JSON.stringify(products));
             return updateProduct;
         } catch (error) {
             return error;
@@ -89,7 +92,7 @@ class ProductManager {
 const primerP =
 {
     title: "producto 1",
-    description: "aldkno",
+    description: "poiuy",
     price: 11,
     thumbnail: "./bla",
     code: 1,
@@ -98,30 +101,47 @@ const primerP =
 const segundoP =
 {
     title: "producto 2",
-    description: "aldkno",
-    price: 11,
+    description: "zxcvb",
+    price: 22,
     thumbnail: "./bla",
     code: 2,
-    stock: 10
+    stock: 15
 }
 const tercerP =
 {
     title: "producto 3",
-    description: "aldkno",
-    price: 11,
+    description: "qwerty",
+    price: 33,
     thumbnail: "./bla",
     code: 3,
-    stock: 10
+    stock: 20
 }
-
-async function test() {
+const cuartoP =
+{
+    title: "producto 4",
+    description: "asdf",
+    price: 44,
+    thumbnail: "./bla",
+    code: 4,
+    stock: 25
+}
+/*async function test() {
     const path = 'DB.json'
     const manager = new ProductManager(path)
+    await manager.createProduct(primerP)
+    await manager.createProduct(segundoP)
     await manager.createProduct(tercerP)
-    const products = await manager.getProducts()
+    await manager.createProduct(cuartoP)
+    //const products = await manager.getProducts()
     //await manager.updateProduct(2, tercerP)
     //console.log(products);
     //await manager.deleteProduct(1)
-}
 
-test()
+test() 
+}*/
+
+
+const path = 'DB.json'
+export const manager = new ProductManager(path);
+
+
