@@ -5,7 +5,6 @@ class ProductManager {
         this.path = path
     }
     async getProducts(queryObj) {
-        console.log("queryObj", queryObj)
         const {limit} = queryObj
         try {
             if (existsSync(this.path)) {
@@ -39,7 +38,7 @@ class ProductManager {
                     id = products[products.length - 1].id + 1
                 }
                 products.push({ id, ...product })
-                await promises.writeFile(path, JSON.stringify(products))
+                await promises.writeFile(this.path, JSON.stringify(products))
             }
         } catch (error) {
             return error
@@ -64,7 +63,7 @@ class ProductManager {
         try {
             const products = await this.getProducts()
             const newProductsList = products.filter(p => p.id !== id)
-            await promises.writeFile(path, JSON.stringify(newProductsList))
+            await promises.writeFile(this.path, JSON.stringify(newProductsList))
             console.log('elemento eliminado')
 
 
@@ -81,7 +80,7 @@ class ProductManager {
             }
             const updateProduct = { ...products[index], ...obj };
             products.splice(index, 1, updateProduct);
-            await promises.writeFile(path, JSON.stringify(products));
+            await promises.writeFile(this.path, JSON.stringify(products));
             return updateProduct;
         } catch (error) {
             return error;
