@@ -5,16 +5,17 @@ class ProductManager {
         this.path = path
     }
     async getProducts(queryObj) {
-        const {limit} = queryObj
+        const { limit } = queryObj
         try {
             if (existsSync(this.path)) {
                 const productsDB = await promises.readFile(this.path, 'utf-8');
-                const productsData = JSON.parse (productsDB);
+                const productsData = JSON.parse(productsDB);
                 return limit ? productsData.slice(0, limit) : productsData;
             } else {
                 return []
             }
         } catch (error) {
+            console.log(error)
             return error
         }
     }
@@ -25,7 +26,7 @@ class ProductManager {
             const { title, description, price, thumbnail, code, stock } = product
             const productsDb = products.find(prod => prod.code === product.code)
             if (productsDb) {
-                return console.log ("El producto que intenta agregar ya se encuentra en la lista")
+                return console.log("El producto que intenta agregar ya se encuentra en la lista")
             }
             if (!title || !description || !price || !thumbnail || !code || !stock) {
                 console.log('Faltan datos en el producto')
@@ -41,6 +42,7 @@ class ProductManager {
                 await promises.writeFile(this.path, JSON.stringify(products))
             }
         } catch (error) {
+            console.log(error)
             return error
         }
     }
@@ -55,6 +57,7 @@ class ProductManager {
                 return product
             }
         } catch (error) {
+            console.log(error)
             return error
         }
     }
@@ -68,6 +71,7 @@ class ProductManager {
 
 
         } catch (error) {
+            console.log(error)
             return error
         }
     }
@@ -83,6 +87,7 @@ class ProductManager {
             await promises.writeFile(this.path, JSON.stringify(products));
             return updateProduct;
         } catch (error) {
+            console.log(error)
             return error;
         }
     }
