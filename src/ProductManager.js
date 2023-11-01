@@ -21,7 +21,7 @@ class ProductManager {
 
     async createProduct(product) {
         try {
-            const products = await this.getProducts()
+            const products = await this.getProducts({})
             const { title, description, price, thumbnail, code, stock } = product
             const productsDb = products.find(prod => prod.code === product.code)
             if (productsDb) {
@@ -30,7 +30,7 @@ class ProductManager {
             if (!title || !description || !price || !thumbnail || !code || !stock) {
                 console.log('Faltan datos en el producto')
             } else {
-                const products = await this.getProducts()
+                const products = await this.getProducts({})
                 let id
                 if (!products.length) {
                     id = 1
@@ -47,7 +47,7 @@ class ProductManager {
 
     async getProductById(id) {
         try {
-            const products = await this.getProducts()
+            const products = await this.getProducts({})
             const product = products.find(p => p.id === id)
             if (!product) {
                 return 'No se encuentra el producto'
@@ -61,7 +61,7 @@ class ProductManager {
 
     async deleteProduct(id) {
         try {
-            const products = await this.getProducts()
+            const products = await this.getProducts({})
             const newProductsList = products.filter(p => p.id !== id)
             await promises.writeFile(this.path, JSON.stringify(newProductsList))
             console.log('elemento eliminado')
