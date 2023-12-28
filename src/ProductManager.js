@@ -51,11 +51,7 @@ class ProductManager {
         try {
             const products = await this.getProducts({})
             const product = products.find(p => p.id === id)
-            if (!product) {
-                return 'No se encuentra el producto'
-            } else {
-                return product
-            }
+            return product
         } catch (error) {
             console.log(error)
             return error
@@ -65,13 +61,14 @@ class ProductManager {
     async deleteProduct(id) {
         try {
             const products = await this.getProducts({})
+            const product = products.find((u) => u.id === id);
+        if (product) {
             const newProductsList = products.filter(p => p.id !== id)
             await promises.writeFile(this.path, JSON.stringify(newProductsList))
-            console.log('elemento eliminado')
-
+        }
+            return product;
 
         } catch (error) {
-            console.log(error)
             return error
         }
     }
@@ -87,59 +84,10 @@ class ProductManager {
             await promises.writeFile(this.path, JSON.stringify(products));
             return updateProduct;
         } catch (error) {
-            console.log(error)
             return error;
         }
     }
 }
-
-const primerP =
-{
-    title: "producto 1",
-    description: "poiuy",
-    price: 11,
-    thumbnail: "./bla",
-    code: 1,
-    stock: 10
-}
-const segundoP =
-{
-    title: "producto 2",
-    description: "zxcvb",
-    price: 22,
-    thumbnail: "./bla",
-    code: 2,
-    stock: 15
-}
-const tercerP =
-{
-    title: "producto 3",
-    description: "qwerty",
-    price: 33,
-    thumbnail: "./bla",
-    code: 3,
-    stock: 20
-}
-const cuartoP =
-{
-    title: "producto 4",
-    description: "asdf",
-    price: 44,
-    thumbnail: "./bla",
-    code: 4,
-    stock: 25
-}
-/*async function test() {
-    const path = 'DB.json'
-    const manager = new ProductManager(path)
-    await manager.createProduct(primerP)
-    //const products = await manager.getProducts()
-    //await manager.updateProduct(2, tercerP)
-    //console.log(products);
-    //await manager.deleteProduct(1)
-
-test() 
-}*/
 
 
 const path = 'DB.json'
