@@ -38,7 +38,7 @@ class ProductManager {
                 } else {
                     id = products[products.length - 1].id + 1
                 }
-                products.push({ id, ...product })
+                products.push({ id, ...product, status: true })
                 await promises.writeFile(this.path, JSON.stringify(products))
             }
         } catch (error) {
