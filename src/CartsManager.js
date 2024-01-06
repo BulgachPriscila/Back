@@ -49,19 +49,24 @@ class CartsManager {
     }
 
     async addToCart(cId, pId) {
-        const cart = await this.getCartById(cId)
-        if (!cart) {
-            console.log("No existe un carrito con ese ID")
-        }
-        const product = await manager.getProductById(pId)
-        if (!product) {
-            console.log("No existe un producto con ese ID")
-        }
-        const pIndex = cart.productos.findIndex((p) => p.product === pId)
-        if (pIndex === -1) {
-            cart.productos.push({ product: pId, quantity: 1 });
-        } else {
-            cart.productos[pIndex].quantity++;
+        try {
+            const cart = await this.getCartById(cId)
+            if (!cart) {
+                console.log("No existe un carrito con ese ID")
+            }
+            const product = await manager.getProductById(pId)
+            if (!product) {
+                console.log("No existe un producto con ese ID")
+            }
+            const pIndex = cart.productos.findIndex((p) => p.product === pId)
+            if (pIndex === -1) {
+            cart.productos.push({ product: pId, quantity: 1 })
+            } else {
+            cart.productos[pIndex].quantity++
+            }
+            return await this.getCartById(cId)
+        } catch (error) {
+            return error
         }
     }
 }
