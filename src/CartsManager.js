@@ -64,7 +64,7 @@ class CartsManager {
             } else {
             cart.productos[pIndex].quantity++
             }
-            return await this.getCartById(cId)
+            return this.getCartById(cId)
         } catch (error) {
             return error
         }
