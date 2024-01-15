@@ -26,8 +26,9 @@ router.get("/:cId", async (req, res) => {
         const cart = await cartManager.getCartById(cId)
         if (!cart) {
             return res.status(404).json({ message: "No se econtró un carrito con ese ID" })
+        }else{
+            res.status(200).json({ message: "Cart found", cart })
         }
-        res.status(200).json({ message: "Cart found", cart })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -36,12 +37,13 @@ router.post("/:cId/products/:pId", async (req, res) => {
     const { cId, pId } = req.params
     if (!cId || !pId) {
         return res.status(400).json({ message: "Faltan datos del producto" })
-    }
-    try {
-        const response = cartManager.addToCart(cId, pId)
-        res.status(200).json({ message: "carrito creado", cart: response });
-    } catch (error) {
-        res.status(500).json({ message: error.message })
+    } else {
+        try {
+            const response = cartManager.addToCart(cId, pId)
+            res.status(200).json({ message: "carrito creado", cart: response });
+        } catch (error) {
+            res.status(500).json({ message: error.message })
+        }
     }
 })
 

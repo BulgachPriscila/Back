@@ -2,7 +2,6 @@ import { existsSync, promises } from 'fs'
 import { manager } from './ProductManager.js';
 
 
-const path = 'cartsDB.json'
 
 class CartsManager {
     constructor(path) {
@@ -18,6 +17,7 @@ class CartsManager {
                 return []
             }
         } catch (error) {
+            console.log(error)
             return error
         }
     }
@@ -38,10 +38,10 @@ class CartsManager {
         }
     }
 
-    async getCartById(id) {
+    async getCartById(cId) {
         try {
             const carts = await this.getCarts()
-            const cart = carts.find(c => c.id === id)
+            const cart = carts.find(c => c.id === cId)
             return cart
         } catch (error) {
             return error
@@ -71,4 +71,5 @@ class CartsManager {
     }
 }
 
+const path = 'cartsDB.json'
 export const cartManager = new CartsManager(path);
