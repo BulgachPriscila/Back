@@ -50,6 +50,7 @@ class CartsManager {
 
     async addToCart(cId, pId) {
         try {
+            const carts = await this.getCarts()
             const cart = await this.getCartById(cId)
             if (!cart) {
                 console.log("No existe un carrito con ese ID")
@@ -58,11 +59,18 @@ class CartsManager {
             if (!product) {
                 console.log("No existe un producto con ese ID")
             }
+            const cIndex = carts.findIndex((c) => c.id === cId)
             const pIndex = cart.productos.findIndex((p) => p.product === pId)
             if (pIndex === -1) {
-            cart.productos.push({ product: pId, quantity: 1 })
+                cart.productos.push({ product: pId, quantity: 1 })
+                carts.splice(cIndex, 1, cart)
+                await promises.writeFile(this.path, JSON.stringify(carts));
+                console.log("Producto agregado al carrito")
             } else {
-            cart.productos[pIndex].quantity++
+                cart.productos[pIndex].quantity++
+                carts.splice(cIndex, 1, cart)
+                await promises.writeFile(this.path, JSON.stringify(carts));
+                console.log("Producto agregado al carrito")
             }
             return this.getCartById(cId)
         } catch (error) {
